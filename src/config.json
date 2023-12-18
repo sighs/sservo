@@ -1,0 +1,20 @@
+{
+  "DaemonSettings": {
+    "page_url": "https://zhdj.xfc.gov.cn/file/api/v2/download?fileId=4f116853-c1db-4f21-aa72-7996331a7d2c.txt",
+    "validate_text": "test"
+  },
+  "RetrySettings": {
+    "success_wait_time": 600,
+    "failure_wait_time": 60,
+    "notify_after_failures": 5,
+    "notify_after_success": 30,
+    "command_after_failures": 20,
+    "command_file": "/home/zhdj/sservo/fileRestart"
+  },
+  "NotificationSettings": {
+      "notification_url": "https://wxpusher.zjiecode.com/api/send/message",
+      "appToken": "AT_v3kqAspvdcV9ypsZzEz8a3fwA74YrVzO",
+      "topicIds": [23376]
+  }
+}
+  
