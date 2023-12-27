@@ -13,7 +13,7 @@ from page import page_get_and_validate  # 指定页面检查
 from wx_notification import send_notification  # 发送通知 调用 wxpusher
 
 class DaemonThread(threading.Thread):
-    def __init__(self, config_path='config.json'):
+    def __init__(self, config_path='sservo.json'):
         super().__init__()
         self.config_path = config_path
         self.config = self.load_config()
@@ -28,17 +28,17 @@ class DaemonThread(threading.Thread):
             with open(self.config_path) as config_file:
                 self.config = json.load(config_file)
                 try:
-                    self.page_url = self.config['DaemonSettings']['page_url']
-                    self.validate_text = self.config['DaemonSettings']['validate_text']
-                    self.success_wait_time = self.config['RetrySettings']['success_wait_time']
-                    self.failure_wait_time = self.config['RetrySettings']['failure_wait_time']
-                    self.notify_after_failures = self.config['RetrySettings']['notify_after_failures']
-                    self.notify_after_success = self.config['RetrySettings']['notify_after_success']
-                    self.command_after_failures = self.config['RetrySettings']['command_after_failures']
-                    self.command_file = self.config['RetrySettings']['command_file']
-                    self.notification_url = self.config['NotificationSettings']['notification_url']
-                    self.appToken = self.config['NotificationSettings']['appToken']
-                    self.topicIds = self.config['NotificationSettings']['topicIds']
+                    self.page_url = self.config['daemon']['page_url']
+                    self.validate_text = self.config['daemon']['validate_text']
+                    self.success_wait_time = self.config['retry']['success_wait_time']
+                    self.failure_wait_time = self.config['retry']['failure_wait_time']
+                    self.notify_after_failures = self.config['retry']['notify_after_failures']
+                    self.notify_after_success = self.config['retry']['notify_after_success']
+                    self.command_after_failures = self.config['retry']['command_after_failures']
+                    self.command_file = self.config['retry']['command_file']
+                    self.notification_url = self.config['notification']['notification_url']
+                    self.appToken = self.config['notification']['appToken']
+                    self.topicIds = self.config['notification']['topicIds']
                 except KeyError as e:
                     logging.error(f"配置文件参数缺失: {e}")
                     raise SystemExit(f"配置文件参数缺失: {e}")

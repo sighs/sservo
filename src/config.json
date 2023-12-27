@@ -1,0 +1,66 @@
+{
+  "sservo_name": "party server management",
+  "sservo_run": "true",
+  "run_begin_readonly": "",
+  "run_beat_readonly": "",
+  "daemon_list": [
+    {
+      "daemon": {
+        "page_url": "https://zhdj.xfc.gov.cn/file/api/v2/download?fileId=4f116853-c1db-4f21-aa72-7996331a7d2c.txt",
+        "request_mode": "get",
+        "validate_text": "test",
+        "daemon_name": "file",
+        "daemon_run": "true"
+      },
+      "retry": {
+        "success_wait_time": 20,
+        "failure_wait_time": 10,
+        "notify_after_failures": 5,
+        "notify_after_success": 30,
+        "command_after_failures": 20,
+        "command_file": "/home/zhdj/sservo/fileRestart"
+      },
+      "notification": {
+        "notification_url": "https://wxpusher.zjiecode.com/api/send/message",
+        "appToken": "AT_v3kqAspvdcV9ypsZzEz8a3fwA74YrVzO",
+        "topicIds": [
+          23376
+        ]
+      },
+      "run_status": {
+        "run_begin_readonly": "",
+        "run_beat_readonly": "",
+        "command_execute_count_readonly": 0
+      }
+    },
+    {
+      "daemon": {
+        "page_url": "https://zhdj.xfc.gov.cn/system/v1/configurations/byItemValue/x-invoke-cache-aside",
+        "request_mode": "get",
+        "validate_text": "8003",
+        "daemon_name": "system",
+        "daemon_run": "true"
+      },
+      "retry": {
+        "success_wait_time": 10,
+        "failure_wait_time": 60,
+        "notify_after_failures": 5,
+        "notify_after_success": 30,
+        "command_after_failures": 20,
+        "command_file": ""
+      },
+      "notification": {
+        "notification_url": "https://wxpusher.zjiecode.com/api/send/message",
+        "appToken": "AT_v3kqAspvdcV9ypsZzEz8a3fwA74YrVzO",
+        "topicIds": [
+          23376
+        ]
+      },
+      "run_status": {
+        "run_begin_readonly": "",
+        "run_beat_readonly": "",
+        "command_execute_count_readonly": 0
+      }
+    }
+  ]
+}
