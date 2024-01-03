@@ -2,8 +2,8 @@ import threading
 import time
 import logging
 import json
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+# from watchdog.observers import Observer
+# from watchdog.events import FileSystemEventHandler
 from sservodo import main_daemon_work
 
 class WorkerThread(threading.Thread):
@@ -17,12 +17,12 @@ class WorkerThread(threading.Thread):
             if self.daemon_config['daemon']['daemon_run'] == "true":
                 logging.info(f"守护进程线程 {self.daemon_config['daemon']['daemon_name']} 正在执行...")
                 # TODO: 执行守护进程的工作
-                main_daemon_work(self.daemon_config)
+                main_daemon_work(self.daemon_config, self.stop_event)
 
-                # 打印正在运行的日志
-                self.log_running_status()
+                # # 打印正在运行的日志
+                # self.log_running_status()
 
-                time.sleep(self.daemon_config['retry']['success_wait_time'])
+                # time.sleep(self.daemon_config['retry']['success_wait_time'])
             else:
                 logging.info(f"守护进程线程 {self.daemon_config['daemon']['daemon_name']} 未启动，跳过执行.")
                 time.sleep(5)  # 如果线程未启动，等待一段时间再检查
@@ -38,20 +38,20 @@ def create_worker_threads(config, stop_event):
         threads.append(thread)
     return threads
 
-class ConfigFileHandler(FileSystemEventHandler):
-    def __init__(self, threads):
-        self.threads = threads
+# class ConfigFileHandler(FileSystemEventHandler):
+#     def __init__(self, threads):
+#         self.threads = threads
 
-    def on_modified(self, event):
-        logging.info("配置文件被修改，重新加载配置...")
-        time.sleep(1)
-        # 在配置文件被修改时，重新加载配置
-        with open('d:/sscode2/sservo/src/config.json', 'r') as file:
-            new_config = json.load(file)
+#     def on_modified(self, event):
+#         logging.info("配置文件被修改，重新加载配置...")
+#         time.sleep(1)
+#         # 在配置文件被修改时，重新加载配置
+#         with open('./config.json', 'r') as file:
+#             new_config = json.load(file)
 
-        # 更新工作线程的配置
-        for thread, daemon_config in zip(self.threads, new_config['daemon_list']):
-            thread.daemon_config = daemon_config
+#         # 更新工作线程的配置
+#         for thread, daemon_config in zip(self.threads, new_config['daemon_list']):
+#             thread.daemon_config = daemon_config
 
 # 全局变量，用于在多线程间传递配置
 config = None
@@ -60,7 +60,7 @@ def main():
     global config
 
     # 读取配置文件
-    with open('d:/sscode2/sservo/src/config.json', 'r') as file:
+    with open('./config.json', 'r') as file:
         config = json.load(file)
 
     # 将 success_wait_time 转换为整数
@@ -82,10 +82,10 @@ def main():
     threads = create_worker_threads(config, stop_event)
 
     # 创建配置文件监控
-    event_handler = ConfigFileHandler(threads)
-    observer = Observer()
-    observer.schedule(event_handler, path='.', recursive=False)
-    observer.start()
+    # event_handler = ConfigFileHandler(threads)
+    # observer = Observer()
+    # observer.schedule(event_handler, path='.', recursive=False)
+    # observer.start()
 
     try:
         # 启动工作线程
@@ -97,15 +97,15 @@ def main():
             time.sleep(1)
 
     except KeyboardInterrupt:
-        logging.info("用户中断程序，程序中断开始，请稍后...")
+        logging.info("用户请求关闭程序，系统将在最后一次访问后关闭，请稍后...")
 
     finally:
         # 设置停止事件，通知所有工作线程停止
         stop_event.set()
 
         # 停止配置文件监控
-        observer.stop()
-        observer.join()
+        # observer.stop()
+        # observer.join()
 
         # 等待工作线程完成
         for thread in threads:
@@ -115,7 +115,7 @@ def main():
         # 关闭日志记录
         logging.shutdown()
 
-        logging.info("程序中断完成")
+        logging.info("程序关闭完成")
 
 if __name__ == "__main__":
     main()

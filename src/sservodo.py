@@ -15,11 +15,11 @@ def send_notification(self, summary, content):
     send_notification(summary, content, self['notification']['notification_url'], self['notification']['appToken'], self['notification']['topicIds'])
 
 # 主运行程序
-def main_daemon_work(self):
+def main_daemon_work(self, stop_event):
     failure_count = 0
     first_failure_time = 0
     sucess_count = 0
-    while True:
+    while not stop_event.is_set():
         try:
             server_name = self['daemon']['daemon_name']
             page_url = self['daemon']['page_url']
